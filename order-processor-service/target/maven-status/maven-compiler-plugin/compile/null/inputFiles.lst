@@ -1,0 +1,10 @@
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\application\consumer\OrderCreatedConsumer.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\application\dto\CompensationMessage.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\application\dto\OrderCreatedEvent.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\application\mapper\OrderProcessorMapper.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\domain\model\OrderProcess.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\domain\model\OrderStatus.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\domain\repository\OrderProcessorDomainRepository.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\infrastructure\messaging\CompensationProducer.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\infrastructure\persistence\OrderProcessEntity.java
+D:\Desenvolvimento\flash-sale-project\order-processor-service\src\main\java\br\com\flashsale\infrastructure\persistence\OrderProcessPanacheRepository.java

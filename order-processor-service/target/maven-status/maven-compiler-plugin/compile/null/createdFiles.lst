@@ -1,0 +1,11 @@
+br\com\flashsale\application\dto\OrderCreatedEvent.class
+br\com\flashsale\application\consumer\OrderCreatedConsumer.class
+br\com\flashsale\infrastructure\persistence\OrderProcessPanacheRepository.class
+br\com\flashsale\domain\model\OrderStatus.class
+br\com\flashsale\domain\repository\OrderProcessorDomainRepository.class
+br\com\flashsale\infrastructure\persistence\OrderProcessEntity.class
+br\com\flashsale\application\dto\CompensationMessage.class
+br\com\flashsale\application\mapper\OrderProcessorMapper.class
+br\com\flashsale\application\mapper\OrderProcessorMapperImpl.class
+br\com\flashsale\infrastructure\messaging\CompensationProducer.class
+br\com\flashsale\domain\model\OrderProcess.class
