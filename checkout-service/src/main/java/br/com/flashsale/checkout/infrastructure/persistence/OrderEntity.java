@@ -2,9 +2,12 @@ package br.com.flashsale.checkout.infrastructure.persistence;
 
 import br.com.flashsale.checkout.domain.model.OrderStatus;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "tb_checkout_orders")
 public class OrderEntity {

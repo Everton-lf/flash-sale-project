@@ -2,7 +2,6 @@ package br.com.flashsale.checkout.application.consumer;
 
 import br.com.flashsale.checkout.application.dto.CompensationMessage;
 import br.com.flashsale.checkout.domain.model.OrderStatus;
-import br.com.flashsale.checkout.infrastructure.persistence.OrderEntity;
 import br.com.flashsale.checkout.infrastructure.persistence.OrderPanacheRepository;
 import br.com.flashsale.checkout.infrastructure.redis.RedisStockService;
 import io.vertx.core.json.JsonObject;
@@ -21,35 +20,34 @@ public class CompensationConsumer {
     RedisStockService redisStockService;
 
     @Inject
-    OrderPanacheRepository orderRepository;
+    OrderPanacheRepository orderPanacheRepository;
 
     @Incoming("order-compensation")
-    @Transactional // Obrigatorio para modificar o registro no banco PostgreSQL
+    @Transactional
     public void processCompensation(JsonObject json) {
         CompensationMessage message = json.mapTo(CompensationMessage.class);
 
-        // Busca o pedido na tb_checkout_orders do db_checkout
-        orderRepository.findByIdOptional(message.pedido_id()).ifPresentOrElse(order -> {
+        orderPanacheRepository.findByIdOptional(message.pedido_id()).ifPresentOrElse(order -> {
 
-            // IDEMPOTÊNCIA: Se o pedido já estiver CANCELLED, ignora para não somar +3 no Redis novamente
-            if (OrderStatus.CANCELLED.equals(order.status)) {
-                LOG.warnf("SAGA - Pedido %s já foi compensado anteriormente. Ignorando mensagem duplicada.", message.pedido_id());
+            // IDEMPOTÊNCIA: Se já foi cancelado, evita somar estoque no Redis novamente
+            if (OrderStatus.CANCELLED.equals(order.getStatus())) {
+                LOG.warnf("SAGA - Pedido %s já foi compensado anteriormente. Ignorando duplicação.", message.pedido_id());
                 return;
             }
 
-            LOG.infof("SAGA - Processando compensação para o pedido %s, produto %s, qtd: %d",
+            LOG.infof("SAGA - Recebida solicitação de compensação para pedido %s, produto %s, qtd: %d",
                     message.pedido_id(), message.produto_id(), message.quantidade());
 
-            // 1. Estorna a quantidade de volta no Redis
+            // 1. Devolve o estoque no Redis
             redisStockService.incrementStock(message.produto_id(), message.quantidade());
 
-            // 2. Atualiza o status na tb_checkout_orders para CANCELLED
-            order.status = OrderStatus.CANCELLED;
-            orderRepository.persist(order);
+            // 2. Atualiza o banco do db_checkout para CANCELLED
+            order.setStatus(OrderStatus.CANCELLED);
+            orderPanacheRepository.persist(order);
 
-            LOG.infof("SAGA - Estoque do produto %s devolvido (+%d) no Redis e pedido %s atualizado para CANCELLED na db_checkout.",
-                    message.produto_id(), message.quantidade(), message.pedido_id());
+            LOG.infof("SAGA - Estoque do produto %s devolvido com sucesso no Redis e pedido %s marcado como CANCELLED.",
+                    message.produto_id(), message.pedido_id());
 
-        }, () -> LOG.errorf("SAGA - Pedido %s não foi encontrado na db_checkout para compensação.", message.pedido_id()));
+        }, () -> LOG.errorf("SAGA - Pedido %s não encontrado no db_checkout.", message.pedido_id()));
     }
 }
