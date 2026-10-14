@@ -272,3 +272,6 @@ docker compose down --volumes
 Com os passos acima, o projeto deve subir e funcionar em qualquer máquina com Docker instalado, tanto em Docker Desktop quanto em Docker CLI no Linux.
 
 Se algum serviço falhar, use `docker compose logs -f` para diagnosticar e confira se as portas e dependências estão disponíveis.
+
+<img width="754" height="842" alt="projeto sale-flash" src="https://github.com/user-attachments/assets/793a58b3-7760-4f70-8a4a-1bef4bafe0bc" />
+
